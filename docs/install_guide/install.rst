@@ -22,14 +22,14 @@ Make sure that:
 #. Copy the plugin into Fuel Master node:
    ::
 
-      $ scp fuel-plugin-vmware-dvs-2.1-2.1.0-1.noarch.rpm <Fuel Master node ip>:/tmp
+      $ scp fuel-plugin-vmware-dvs-2.2-2.2.0-1.noarch.rpm <Fuel Master node ip>:/tmp
 
 #. Log into the Fuel Master node and install the plugin:
    ::
 
       $ ssh root@<Fuel Master node ip>
       [root@nailgun ~]# fuel plugins --install /
-      /tmp/fuel-plugin-vmware-dvs-2.1-2.1.0-1.noarch.rpm
+      /tmp/fuel-plugin-vmware-dvs-2.2-2.2.0-1.noarch.rpm
       [root@nailgun  ]# fuel plugins
       DEPRECATION WARNING: /etc/fuel/client/config.yaml exists and will
       be used as the source for settings. This behavior is deprecated.
@@ -39,7 +39,7 @@ Make sure that:
       +------+--------------------------+-----------+--------------------+
       | id   | name                     | version   | package\_version   |
       +------+--------------------------+-----------+--------------------+
-      | 2    | fuel-plugin-vmware-dvs   | 2.1.0     | 4.0.0              |
+      | 2    | fuel-plugin-vmware-dvs   | 2.2.0     | 4.0.0              |
       +------+--------------------------+-----------+--------------------+
 
 .. raw:: latex

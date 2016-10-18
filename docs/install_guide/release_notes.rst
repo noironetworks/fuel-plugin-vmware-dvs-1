@@ -1,7 +1,7 @@
 Release notes
 +++++++++++++
 
-Release notes for VMware DVS plugin 2.1.0:
+Release notes for VMware DVS plugin 2.2.0:
 
 * New architecture with the vmware-dvs neutron agent.
 

@@ -1,5 +1,5 @@
 =====================================================
-Guide to the VMware DVS plugin version 2.1.0 for Fuel
+Guide to the VMware DVS plugin version 2.2.0 for Fuel
 =====================================================
 
 Introduction
