@@ -12,3 +12,12 @@ attributes:
     label: "Use the VMware DVS firewall driver"
     weight: 20
     type: "checkbox"
+  vmware_dvs_net_maps:
+    value: ""
+    label: "Enter the dvSwitch's name."
+    description: "Set the name of dvSwitch on vCenter."
+    weight: 25
+    type: "text"
+    regex:
+      source: &non_empty_string '\S'
+      error: "Empty name of dvSwitch"
