@@ -8,6 +8,7 @@
     vcenter = args[0]['computes']
     physnet = args[1]["predefined_networks"]["admin_internal_net"]["L2"]["physnet"]
     use_fw_driver = args[2]["vmware_dvs_fw_driver"]
+    netmaps = args[2]["vmware_dvs_net_maps"]
     current_node = args[3].split(".")[0]
     controllersp = args[4].any? {|role| role.include?("controller")}
     primaryp = args[4].any? {|role| role.include?("primary")}
@@ -20,7 +21,12 @@
         agent["vsphere_login"] = vc["vc_user"]
         agent["vsphere_password"] = vc["vc_password"]
         cluster = vc["vc_cluster"]
-        agent["network_maps"] = physnet + ":" + cluster
+        if netmaps.include? ':'
+           vds = netmaps.delete(' ').split(";").collect{|k| k.split(":")}.select{|x| x[0] == cluster}.collect{|x| x[1]}[0]
+        else
+           vds = netmaps
+        end
+        agent["network_maps"] = physnet + ":" + vds
         agent["use_fw_driver"] = use_fw_driver
         agent["ha_enabled"] = controllersp
         agent["primary"] = primaryp
