@@ -1,30 +1,38 @@
 diff --git a/nova/virt/vmwareapi/vif.py b/nova/virt/vmwareapi/vif.py
-index 3d228d7..d513a74 100644
+index eb8882c..d5d9ab6 100644
 --- a/nova/virt/vmwareapi/vif.py
 +++ b/nova/virt/vmwareapi/vif.py
-@@ -146,6 +146,10 @@
- def get_network_ref(session, cluster, vif, is_neutron):
-     if is_neutron:
-         network_ref = _get_neutron_network(session, cluster, vif)
-+        try:
+@@ -132,11 +132,19 @@ def _get_neutron_network(session, cluster, vif):
+                        'network-type': network_type,
+                        'use-external-id': use_external_id}
+     elif vif['type'] == model.VIF_TYPE_DVS:
+-        network_id = vif['network']['bridge']
++        # Port binding for DVS VIF types may pass the name
++        # of the port group, so use it if present
++        network_id = vif.get('details', {}).get('dvs_port_group_name')
++        if network_id is None:
++            # Make use of the original one, in the event that the
++            # port binding does not provide this key in VIF details
++            network_id = vif['network']['bridge']
+         network_ref = network_util.get_network_with_the_name(
+                 session, network_id, cluster)
+         if not network_ref:
+             raise exception.NetworkNotFoundForBridge(bridge=network_id)
++        if vif.get('details') and vif['details'].get('dvs_port_key'):
 +            network_ref['dvs_port_key'] = vif['details']['dvs_port_key']
-+        except KeyError:
-+            pass
      else:
-         create_vlan = vif['network'].get_meta('should_create_vlan', False)
-         network_ref = ensure_vlan_bridge(session, vif, cluster=cluster,
+         reason = _('vif type %s not supported') % vif['type']
+         raise exception.InvalidInput(reason=reason)
 diff --git a/nova/virt/vmwareapi/vm_util.py b/nova/virt/vmwareapi/vm_util.py
-index bbf2835..be68010 100644
+index 05bd74c..4ef5ace 100644
 --- a/nova/virt/vmwareapi/vm_util.py
 +++ b/nova/virt/vmwareapi/vm_util.py
-@@ -339,6 +339,10 @@ def _create_vif_spec(client_factory, vif_info):
+@@ -453,6 +453,8 @@ def _create_vif_spec(client_factory, vif_info, vif_limits=None):
                      'ns0:DistributedVirtualSwitchPortConnection')
          portgroup.switchUuid = network_ref['dvsw']
          portgroup.portgroupKey = network_ref['dvpg']
-+        try:
++        if 'dvs_port_key' in network_ref:
 +            portgroup.portKey = network_ref['dvs_port_key']
-+        except KeyError:
-+            pass
          backing.port = portgroup
      else:
          backing = client_factory.create(
