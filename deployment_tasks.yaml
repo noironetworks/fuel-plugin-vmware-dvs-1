@@ -93,7 +93,7 @@
     timeout: 1800
 
 - id: vmware-dvs-network-agents-l3
-  type: puppet
+  type: skipped
   version: 2.0.0
   groups: ['primary-controller','controller','compute-vmware']
   required_for: [vmware-dvs-network-end]
@@ -109,7 +109,7 @@
     timeout: 1800
 
 - id: vmware-dvs-network-agents-metadata
-  type: puppet
+  type: skipped
   version: 2.0.0
   groups: ['primary-controller','controller','compute-vmware']
   required_for: [vmware-dvs-network-end]
